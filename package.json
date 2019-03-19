@@ -1,0 +1,44 @@
+{
+  "name": "historicaldata",
+  "version": "1.0.0",
+  "description": "Browse historical data",
+  "main": "index.js",
+  "scripts": {
+    "start": "json-server --watch db.json",
+    "test": "test",
+    "build": "webpack --mode production",
+    "devbuild": "webpack --mode development --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thomhsu/historicaldata.git"
+  },
+  "keywords": [
+    "historical",
+    "data",
+    "database",
+    "search"
+  ],
+  "author": "Thomas Hsu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thomhsu/historicaldata/issues"
+  },
+  "homepage": "https://github.com/thomhsu/historicaldata#readme",
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "css-loader": "^2.1.1",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
+  },
+  "dependencies": {
+    "react-paginate": "^6.3.0"
+  }
+}
