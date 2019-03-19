@@ -12,9 +12,10 @@ function App() {
   //   getTopics();
   // }, []);
 
-  const getTopics = () => {
-    fetch('/events')
-      // .then((res) => res.json())
+  const getTopics = (query) => {
+    console.log(query)
+    fetch(`/events?q=${query}`)
+      .then((res) => res.json())
       .then((results) => setResults(results))
       .catch((err) => console.log(err));
   }
@@ -25,7 +26,7 @@ function App() {
   
   const handleSubmit = () => {
     event.preventDefault();
-    
+    getTopics(searchText);
   }
 
   return (
@@ -37,6 +38,9 @@ function App() {
         </label>
         <input type="submit" value="Submit" />
       </form>
+      <p>
+        {JSON.stringify(results)}
+      </p>
     </div>
   );
 }
