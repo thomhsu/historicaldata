@@ -7,7 +7,7 @@ function App() {
 
   const [results, setResults] = useState([]),
         [searchText, setSearchText] = useState(''),
-        [pageCount, setPageCount] = useState(0),
+        [pageCount, setPageCount] = useState(1),
         [currentPage, setPage] = useState(1);
 
   // useEffect(() => {
@@ -18,10 +18,10 @@ function App() {
 
     let count = fetch(`/events?q=${searchText}`)
       .then((res) => res.json())
-      .then((results) => setPageCount(results.length / 5))
+      .then((results) => setPageCount(results.length / 10))
       .catch((err) => console.log(err));
 
-    fetch(`/events?q=${searchText}&_page=${currentPage + 1}&_limit=5`)
+    fetch(`/events?q=${searchText}&_page=${currentPage + 1}&_limit=10`)
       .then((res) => res.json())
       .then((results) => setResults(results))
       .catch((err) => console.log(err));
@@ -33,7 +33,7 @@ function App() {
   
   const handleSubmit = () => {
     event.preventDefault();
-    setPage(1);
+    setPage(0);
     getTopics(searchText);
   }
 
@@ -54,6 +54,7 @@ function App() {
         <input type="submit" value="Submit" />
       </form>
       {results.map(fact => <SearchResult fact={fact} />)}
+      <br/>
       <ReactPaginate
           previousLabel={'previous'}
           nextLabel={'next'}
