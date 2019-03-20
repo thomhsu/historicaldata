@@ -5,25 +5,23 @@ import SearchResult from './SearchResult.jsx';
 
 function App() {
 
-  const [results, setResults] = useState([]);
-  const [searchText, setSearchText] = useState('');
-  const [pageCount, setPageCount] = useState(0);
+  const [results, setResults] = useState([]),
+        [searchText, setSearchText] = useState(''),
+        [pageCount, setPageCount] = useState(0),
+        [currentPage, setPage] = useState(1);
 
   // useEffect(() => {
   //   getTopics();
   // }, []);
 
-  const getTopics = (query) => {
+  const getTopics = () => {
 
-    let count = fetch(`/events?q=${query}`)
+    let count = fetch(`/events?q=${searchText}`)
       .then((res) => res.json())
-      .then((results) => {
-        console.log(results.length);
-        return results.length
-      })
+      .then((results) => setPageCount(results.length / 5))
       .catch((err) => console.log(err));
 
-    fetch(`/events?q=${query}&_page=1&_limit=10`)
+    fetch(`/events?q=${searchText}&_page=${currentPage + 1}&_limit=5`)
       .then((res) => res.json())
       .then((results) => setResults(results))
       .catch((err) => console.log(err));
@@ -35,12 +33,15 @@ function App() {
   
   const handleSubmit = () => {
     event.preventDefault();
+    setPage(1);
     getTopics(searchText);
   }
 
-  const handlePageClick = () => {
-    console.log('page clicked')
-  }
+  const handlePageClick = data => {
+    console.log(data.selected);
+    setPage(data.selected);
+    getTopics();
+  };
 
   return (
     <div>
@@ -52,9 +53,6 @@ function App() {
         </label>
         <input type="submit" value="Submit" />
       </form>
-      {/* <p>
-        {JSON.stringify(results)}
-      </p> */}
       {results.map(fact => <SearchResult fact={fact} />)}
       <ReactPaginate
           previousLabel={'previous'}
