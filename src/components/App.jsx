@@ -7,8 +7,8 @@ function App() {
 
   const [results, setResults] = useState([]),
         [searchText, setSearchText] = useState(''),
-        [pageCount, setPageCount] = useState(1),
-        [currentPage, setPage] = useState(1);
+        [pageCount, setPageCount] = useState(0),
+        [currentPage, setPage] = useState(0);
 
   // useEffect(() => {
   //   getTopics();
@@ -16,13 +16,13 @@ function App() {
 
   const getTopics = () => {
 
-    let count = fetch(`/events?q=${searchText}`)
-      .then((res) => res.json())
-      .then((results) => setPageCount(results.length / 10))
-      .catch((err) => console.log(err));
+    console.log(`Getting ${currentPage + 1}`);
 
-    fetch(`/events?q=${searchText}&_page=${currentPage + 1}&_limit=10`)
-      .then((res) => res.json())
+    fetch(`/events?q=${searchText}&_start=0&_page=${currentPage + 1}&_limit=5`)
+      .then((res) => {
+        setPageCount(res.headers.get('X-Total-Count') / 5);
+        return res.json();
+      })
       .then((results) => setResults(results))
       .catch((err) => console.log(err));
   }
@@ -38,7 +38,7 @@ function App() {
   }
 
   const handlePageClick = data => {
-    console.log(data.selected);
+    console.log('Setting ' + data.selected);
     setPage(data.selected);
     getTopics();
   };
