@@ -7,20 +7,19 @@ function App() {
 
   const [results, setResults] = useState([]),
         [searchText, setSearchText] = useState(''),
-        [pageCount, setPageCount] = useState(0),
-        [currentPage, setPage] = useState(0);
+        [pageCount, setPageCount] = useState(0)
 
   // useEffect(() => {
   //   getTopics();
   // }, []);
 
-  const getTopics = () => {
+  const getTopics = (page = 1) => {
 
-    console.log(`Getting ${currentPage + 1}`);
+    console.log(`Getting ${page}`);
 
-    fetch(`/events?q=${searchText}&_start=0&_page=${currentPage + 1}&_limit=5`)
-      .then((res) => {
-        setPageCount(res.headers.get('X-Total-Count') / 5);
+    fetch(`/events?q=${searchText}&_page=${page}&_limit=5`)
+      .then(res => {
+        setPageCount(Math.ceil(res.headers.get('X-Total-Count') / 5));
         return res.json();
       })
       .then((results) => setResults(results))
@@ -33,14 +32,14 @@ function App() {
   
   const handleSubmit = () => {
     event.preventDefault();
-    setPage(0);
-    getTopics(searchText);
+    getTopics();
   }
 
   const handlePageClick = data => {
-    console.log('Setting ' + data.selected);
-    setPage(data.selected);
-    getTopics();
+    let page = Number(data.selected) + 1;
+    console.log(`React paginate is setting ${page}`);
+    console.log('State is page ' + page)
+    getTopics(page);
   };
 
   return (
@@ -48,7 +47,7 @@ function App() {
       <h1>HISTORY WE'VE GOTS IT</h1>
       <form onSubmit={handleSubmit}>
         <label>
-          Name:
+          Search:&nbsp;&nbsp;
           <input type="text" value={searchText} onChange={handleChange} />
         </label>
         <input type="submit" value="Submit" />
